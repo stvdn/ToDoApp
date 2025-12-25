@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
 
     #local apps
     'tasks',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -124,8 +127,41 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# CORS configuration
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:3000",
 ]
+
+# Base URL for media files (ej: http://localhost:8000/media/foto.jpg)
+MEDIA_URL = '/media/'
+
+# Path to the directory where media files will be stored
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# REST Framework configuration
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated', 
+    ),
+}
+
+# Simple JWT configuration
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    # Custom cookie configuration
+    'AUTH_COOKIE': 'access_token',            # Cookie name
+    'AUTH_COOKIE_HTTP_ONLY': True,            # JS cannot read it (XSS protection)
+    'AUTH_COOKIE_SECURE': False,              # False in Dev (http), True in Prod (https)
+    'AUTH_COOKIE_SAMESITE': 'Lax',            # CSRF protection
+}
 

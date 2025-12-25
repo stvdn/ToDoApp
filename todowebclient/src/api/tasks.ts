@@ -1,22 +1,18 @@
-import axios from 'axios';
+import api from './axios';
 import { type Task } from '../types/task';
 
-const tasksApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/tasks/'
-});
-
 export const getAllTasks = () => {
-    return tasksApi.get<Task[]>('/');
+    return api.get<Task[]>('/tasks/');
 };
 
 export const createTask = (task: Task) => {
-    return tasksApi.post<Task>('/', task);
+    return api.post<Task>('/tasks/', task);
 };
 
 export const deleteTask = (id: number) => {
-    return tasksApi.delete(`/${id}/`);
+    return api.delete(`/${id}/`);
 };
 
 export const updateTask = (id: number, task: Task) => {
-    return tasksApi.put<Task>(`/${id}/`, task);
+    return api.put<Task>(`/${id}/`, task);
 };
