@@ -1,5 +1,6 @@
-import api from './axios';
-import { type Task } from '../types/task';
+
+import { type Task } from '../types/index';
+import api from '../../../lib/axios'
 
 export const getAllTasks = () => {
     return api.get<Task[]>('/tasks/');
